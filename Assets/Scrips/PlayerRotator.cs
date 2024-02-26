@@ -7,6 +7,8 @@ public class PlayerRotator : MonoBehaviour
 {
     [SerializeField] private float _forceRotate;
     [SerializeField] private float _offset;
+    [SerializeField] private float _speedRotate;
+
     [SerializeField] private Vector3 _eulerAngleVelocityLeft;
     [SerializeField] private Vector3 _eulerAngleVelocityRight;
 
@@ -27,8 +29,8 @@ public class PlayerRotator : MonoBehaviour
 
     public void Rotate()
     {
-        Quaternion deltaRotationLeft = Quaternion.Euler(_eulerAngleVelocityLeft * Time.fixedDeltaTime);
-        Quaternion deltaRotationRight = Quaternion.Euler(_eulerAngleVelocityRight * Time.fixedDeltaTime);
+        Quaternion deltaRotationLeft = Quaternion.Euler(_eulerAngleVelocityLeft * _speedRotate * Time.fixedDeltaTime);
+        Quaternion deltaRotationRight = Quaternion.Euler(_eulerAngleVelocityRight * _speedRotate * Time.fixedDeltaTime);
 
         if (_leftTurn.IsPressed || Input.GetKey(KeyCode.A))
         {
