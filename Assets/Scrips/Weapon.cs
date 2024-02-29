@@ -10,31 +10,27 @@ public class Weapon : MonoBehaviour
 
     [SerializeField] private Ammunition _bullet;
 
-    [SerializeField] private Button _weapon;
+    [SerializeField] private Transform _parent;
 
-    private float _currentTimeCooldown;
-
-    private void Awake()
+    public float CreateAmmunition(float currentTimeCooldown)
     {
-        _currentTimeCooldown = _cooldown;
+        if (currentTimeCooldown >= _cooldown)
+        {
+            Instantiate(_bullet, _parent.position, _parent.rotation, _parent);
+            currentTimeCooldown = 0;
+            return currentTimeCooldown;
+        }
+
+        return currentTimeCooldown;
     }
 
-    private void Update()
+    public int GiveDamage()
     {
-        _currentTimeCooldown += Time.deltaTime;
-
-        if (Input.GetMouseButtonDown(0) || _weapon.IsPressed)
-        {
-            CreateAmmunition();
-        }
+        return _damage;
     }
 
-    private void CreateAmmunition()
+    public float GiveCooldown()
     {
-        if (_currentTimeCooldown >= _cooldown)
-        {
-            Instantiate(_bullet, transform.position, transform.rotation);
-            _currentTimeCooldown = 0;
-        }
+        return _cooldown;
     }
 }

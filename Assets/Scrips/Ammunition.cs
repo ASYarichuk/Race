@@ -7,6 +7,13 @@ public class Ammunition : MonoBehaviour
     [SerializeField] private float _speed;
     [SerializeField] private float _timeLife;
 
+    private int _damage = 0;
+
+    private void Awake()
+    {
+        _damage = GetComponentInParent<Weapon>().GiveDamage();
+    }
+
     private void Update()
     {
         transform.position += transform.forward * _speed * Time.deltaTime;
@@ -24,5 +31,10 @@ public class Ammunition : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Destroy(gameObject);
+    }
+
+    public int GiveDamage()
+    {
+        return _damage;
     }
 }

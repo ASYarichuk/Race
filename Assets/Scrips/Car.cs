@@ -11,7 +11,7 @@ public class Car : MonoBehaviour
     {
         _health -= damage;
 
-        if (_health < 0)
+        if (_health <= 0)
         {
             Death();
         }
@@ -20,5 +20,13 @@ public class Car : MonoBehaviour
     public void Death()
     {
         Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.GetComponent<Ammunition>())
+        {
+           TakeDamage(other.GetComponent<Ammunition>().GiveDamage());
+        }
     }
 }
