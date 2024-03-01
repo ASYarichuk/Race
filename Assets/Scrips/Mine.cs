@@ -4,8 +4,5 @@ using UnityEngine;
 
 public class Mine : Ammunition
 {
-    private void Start()
-    {
-        transform.SetParent(null);
-    }
+
 }

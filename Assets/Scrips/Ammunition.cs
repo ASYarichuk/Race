@@ -14,6 +14,11 @@ public class Ammunition : MonoBehaviour
         _damage = GetComponentInParent<Weapon>().GiveDamage();
     }
 
+    private void Start()
+    {
+        transform.SetParent(null);
+    }
+
     private void Update()
     {
         transform.position += transform.forward * _speed * Time.deltaTime;
