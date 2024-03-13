@@ -10,6 +10,7 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] private float _startValueAcceleration = 0.5f;
     [SerializeField] private float _maxAcceleration = 2f;
     [SerializeField] private float _limitSpeedBeforeResetAcceleration = 2f;
+    [SerializeField] private Vector3 _speed;
 
     [SerializeField] private Button _gasPedal;
     [SerializeField] private Button _accelerator;
@@ -50,6 +51,7 @@ public class PlayerMover : MonoBehaviour
             }
 
             _rigidbody.AddForce(direction * _forceMove * _currentAcceleration * Time.fixedDeltaTime);
+            _speed = direction * _forceMove * _currentAcceleration * Time.fixedDeltaTime;
 
             if (_currentAcceleration > _maxAcceleration)
             {
