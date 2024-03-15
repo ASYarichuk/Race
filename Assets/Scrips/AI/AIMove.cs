@@ -10,6 +10,9 @@ public class AIMove : MonoBehaviour
     [SerializeField] private float _speed;
     [SerializeField] private float _maxSpeed;
     [SerializeField] private float _distanceToPoint;
+    [SerializeField] private float _minAcceleration;
+    [SerializeField] private float _maxAcceleration;
+
     [SerializeField] private ControllerPoints _controllerPoints;
 
     private Vector3 _currentTarget;
@@ -47,7 +50,7 @@ public class AIMove : MonoBehaviour
     {
         if (_speed < _maxSpeed)
         {
-            _speed += Time.deltaTime;
+            _speed += Time.deltaTime * Random.Range(_minAcceleration, _maxAcceleration);
         }
     }
 

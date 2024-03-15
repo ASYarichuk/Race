@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class AIWeapon : Weapon
 {
-    [SerializeField] private float _rangeAttack = 100f;
-
     [SerializeField] private float _currentTimeCooldown;
 
     private void Awake()
