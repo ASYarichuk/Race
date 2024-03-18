@@ -13,7 +13,7 @@ public class CameraMover : MonoBehaviour
     private void Awake()
     {
         _transform = transform;
-        _offset = transform.position - _targetTransform.position;
+        _offset = _transform.position - _targetTransform.position;
     }
 
     private void LateUpdate()

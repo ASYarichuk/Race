@@ -35,15 +35,18 @@ public class AIMove : MonoBehaviour
 
     private void Update()
     {
-        Move();
-        CheckCurrentTarget();
-        _agent.speed = _speed;
-
         if (_lastRotate - transform.eulerAngles.y > 0.1f)
         {
             _lastRotate = transform.eulerAngles.y;
             _speed -= _speed > 5 ? Time.deltaTime * 100f : Time.deltaTime;
         }
+        else
+        {
+            Move();
+        }
+
+        CheckCurrentTarget();
+        _agent.speed = _speed;
     }
 
     private void Move()
