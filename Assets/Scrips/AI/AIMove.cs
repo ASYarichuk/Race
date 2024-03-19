@@ -38,7 +38,20 @@ public class AIMove : MonoBehaviour
         if (_lastRotate - transform.eulerAngles.y > 0.1f)
         {
             _lastRotate = transform.eulerAngles.y;
-            _speed -= _speed > 5 ? Time.deltaTime * 100f : Time.deltaTime;
+
+            if (_speed > 10)
+            {
+                _speed -= _speed > 20 ? Time.deltaTime * 100f : Time.deltaTime;
+            }
+        }
+        else if (transform.eulerAngles.y - _lastRotate > 0.1f)
+        {
+            _lastRotate = transform.eulerAngles.y;
+
+            if (_speed > 10)
+            {
+                _speed -= _speed > 20 ? Time.deltaTime * 100f : Time.deltaTime;
+            }
         }
         else
         {
@@ -59,7 +72,7 @@ public class AIMove : MonoBehaviour
 
     private void CheckCurrentTarget()
     {
-        if(Vector3.Distance(transform.position, _currentTarget) < _distanceToPoint)
+        if (Vector3.Distance(transform.position, _currentTarget) < _distanceToPoint)
         {
             _currentTarget = _controllerPoints.SetPoint(_currentNumberPoint);
             _currentNumberPoint++;

@@ -5,8 +5,6 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerRotator : MonoBehaviour
 {
-    [SerializeField] private float _forceRotate;
-
     [SerializeField] private float _speedRotate;
 
     [SerializeField] private Vector3 _eulerAngleVelocityLeft;
