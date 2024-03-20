@@ -12,6 +12,9 @@ public class AIMove : MonoBehaviour
     [SerializeField] private float _distanceToPoint;
     [SerializeField] private float _minAcceleration;
     [SerializeField] private float _maxAcceleration;
+    [SerializeField] private float _slowSpeedTurn = 100f;
+    [SerializeField] private float _minAngleRotate = 0.1f;
+    [SerializeField] private float _speedLimitTurn = 10f;
 
     [SerializeField] private ControllerPoints _controllerPoints;
 
@@ -19,6 +22,7 @@ public class AIMove : MonoBehaviour
     private int _currentNumberPoint = 0;
     private NavMeshAgent _agent;
     private float _lastRotate;
+    private float _maxSpeedLimitTurn;
 
     private void Awake()
     {
@@ -35,22 +39,22 @@ public class AIMove : MonoBehaviour
 
     private void Update()
     {
-        if (_lastRotate - transform.eulerAngles.y > 0.1f)
+        if (_lastRotate - transform.eulerAngles.y > _minAngleRotate)
         {
             _lastRotate = transform.eulerAngles.y;
 
-            if (_speed > 10)
+            if (_speed > _speedLimitTurn)
             {
-                _speed -= _speed > 20 ? Time.deltaTime * 100f : Time.deltaTime;
+                _speed -= _speed > _maxSpeedLimitTurn ? Time.deltaTime * _slowSpeedTurn : Time.deltaTime;
             }
         }
-        else if (transform.eulerAngles.y - _lastRotate > 0.1f)
+        else if (transform.eulerAngles.y - _lastRotate > _minAngleRotate)
         {
             _lastRotate = transform.eulerAngles.y;
 
-            if (_speed > 10)
+            if (_speed > _speedLimitTurn)
             {
-                _speed -= _speed > 20 ? Time.deltaTime * 100f : Time.deltaTime;
+                _speed -= _speed > _maxSpeedLimitTurn ? Time.deltaTime * _slowSpeedTurn : Time.deltaTime;
             }
         }
         else
