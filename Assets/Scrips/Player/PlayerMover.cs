@@ -7,23 +7,21 @@ public class PlayerMover : MonoBehaviour
 {
     [SerializeField] private float _forceMove;
     [SerializeField] private float _maxVelocity;
-    [SerializeField] private float _startValueAcceleration = 0.5f;
+    [SerializeField] private float _currentAcceleration = 0.5f;
     [SerializeField] private float _maxAcceleration = 2f;
-    [SerializeField] private float _currentSpeed;
 
     [SerializeField] private Button _gasPedal;
     [SerializeField] private Button _accelerator;
+
+    [SerializeField] private CheckerSurface _checkerSurface;
 
     private Rigidbody _rigidbody;
 
     private float _ratioAccelerator = 1.3f;
 
-    [SerializeField] private float _currentAcceleration;
-
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
-        _currentAcceleration = _startValueAcceleration;
     }
 
     private void FixedUpdate()
@@ -50,14 +48,12 @@ public class PlayerMover : MonoBehaviour
                 _currentAcceleration = _maxAcceleration;
             }
 
-            _rigidbody.AddForce(direction * _forceMove * _currentAcceleration * Time.fixedDeltaTime);
+            _rigidbody.AddForce(direction * _forceMove * _currentAcceleration * _checkerSurface.CheckSurface(Time.fixedDeltaTime));
         }
     }
 
     private void LimitSpeed()
     {
-        _currentSpeed = _rigidbody.velocity.magnitude;
-
         if (_rigidbody.velocity.magnitude > _maxVelocity)
         {
             _rigidbody.velocity = _rigidbody.velocity.normalized * _maxVelocity;

@@ -18,6 +18,8 @@ public class AIMove : MonoBehaviour
 
     [SerializeField] private ControllerPoints _controllerPoints;
 
+    [SerializeField] private CheckerSurface _checkerSurface;
+
     private Vector3 _currentTarget;
     private int _currentNumberPoint = 0;
     private NavMeshAgent _agent;
@@ -45,7 +47,8 @@ public class AIMove : MonoBehaviour
 
             if (_speed > _speedLimitTurn)
             {
-                _speed -= _speed > _maxSpeedLimitTurn ? Time.deltaTime * _slowSpeedTurn : Time.deltaTime;
+                _speed -= _speed > _maxSpeedLimitTurn ? _checkerSurface.CheckSurface(Time.deltaTime) * 
+                    _slowSpeedTurn : _checkerSurface.CheckSurface(Time.deltaTime);
             }
         }
         else if (transform.eulerAngles.y - _lastRotate > _minAngleRotate)
@@ -54,7 +57,8 @@ public class AIMove : MonoBehaviour
 
             if (_speed > _speedLimitTurn)
             {
-                _speed -= _speed > _maxSpeedLimitTurn ? Time.deltaTime * _slowSpeedTurn : Time.deltaTime;
+                _speed -= _speed > _maxSpeedLimitTurn ? _checkerSurface.CheckSurface(Time.deltaTime) * 
+                    _slowSpeedTurn : _checkerSurface.CheckSurface(Time.deltaTime);
             }
         }
         else
@@ -70,7 +74,7 @@ public class AIMove : MonoBehaviour
     {
         if (_speed < _maxSpeed)
         {
-            _speed += Time.deltaTime * Random.Range(_minAcceleration, _maxAcceleration);
+            _speed += _checkerSurface.CheckSurface(Time.deltaTime) * Random.Range(_minAcceleration, _maxAcceleration);
         }
     }
 
