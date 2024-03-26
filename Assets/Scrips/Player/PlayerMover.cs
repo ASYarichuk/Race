@@ -7,6 +7,7 @@ public class PlayerMover : MonoBehaviour
 {
     [SerializeField] private float _forceMove;
     [SerializeField] private float _maxVelocity;
+    [SerializeField] private float _minVelocity;
     [SerializeField] private float _currentAcceleration = 0.5f;
     [SerializeField] private float _maxAcceleration = 2f;
 
@@ -48,7 +49,14 @@ public class PlayerMover : MonoBehaviour
                 _currentAcceleration = _maxAcceleration;
             }
 
-            _rigidbody.AddForce(direction * _forceMove * _currentAcceleration * _checkerSurface.CheckSurface(Time.fixedDeltaTime));
+            if (_rigidbody.velocity.magnitude > _minVelocity)
+            {
+                _rigidbody.AddForce(direction * _forceMove * _currentAcceleration * _checkerSurface.CheckSurface(Time.fixedDeltaTime));
+            }
+            else
+            {
+                _rigidbody.AddForce(direction * _forceMove * _currentAcceleration);
+            }
         }
     }
 
