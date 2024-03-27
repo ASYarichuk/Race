@@ -24,9 +24,17 @@ public class Car : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<Ammunition>())
+        if (other.TryGetComponent(out Ammunition ammunition))
         {
-           TakeDamage(other.GetComponent<Ammunition>().GiveDamage());
+           TakeDamage(ammunition.GiveDamage());
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.TryGetComponent(out Ammunition ammunition))
+        {
+            TakeDamage(ammunition.GiveDamage());
         }
     }
 }

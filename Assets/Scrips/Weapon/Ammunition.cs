@@ -12,10 +12,6 @@ public class Ammunition : MonoBehaviour
     private void Awake()
     {
         _damage = GetComponentInParent<Weapon>().GiveDamage();
-    }
-
-    private void Start()
-    {
         transform.SetParent(null);
     }
 
