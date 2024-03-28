@@ -15,7 +15,7 @@ public class AIMove : MonoBehaviour
     [SerializeField] private float _slowSpeedTurnOne = 100f;
     [SerializeField] private float _slowSpeedTurnTwo = 200f;
     [SerializeField] private float _slowSpeedTurnThree = 300f;
-    [SerializeField] private float _minAngleRotate = 0.5f;
+    [SerializeField] private float _minAngleRotate = 0.1f;
     [SerializeField] private float _speedLimitTurnLevelOne = 15f;
     [SerializeField] private float _speedLimitTurnLevelTwo = 20f;
     [SerializeField] private float _speedLimitTurnLevelThree = 35f;
