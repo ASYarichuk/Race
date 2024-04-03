@@ -6,15 +6,7 @@ public class WheelsAnimation : MonoBehaviour
 {
     [SerializeField] private GameObject[] _wheels = new GameObject[4];
 
-    private WheelCollider[] _wheelsCollider = new WheelCollider[4];
-
-    private void Awake()
-    {
-        for (int i = 0; i < _wheels.Length; i++)
-        {
-            _wheelsCollider[i] = _wheels[i].GetComponentInChildren<WheelCollider>();
-        }
-    }
+    [SerializeField] private WheelCollider[] _wheelsCollider = new WheelCollider[4];
 
     private void FixedUpdate()
     {
