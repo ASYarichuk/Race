@@ -11,17 +11,24 @@ public class Wheel : MonoBehaviour
     [SerializeField] private float _torque = 200f;
     [SerializeField] private Rigidbody _rigidbody;
 
-    [SerializeField] private float _kmPerHour;
+    [SerializeField] private float _speed;
+    [SerializeField] private float _maxSpeedForward = 90;
+    [SerializeField] private float _maxSpeedBack = 35;
 
     private static float _coefficientKPHInMPH = 3.6f;
 
     private bool _movingForward = true;
 
+    private float[] _slip = new float[4];
+
+    private int _forceBraking = 5000;
+
     private void FixedUpdate()
     {
-        _kmPerHour = _rigidbody.velocity.magnitude * _coefficientKPHInMPH;
         SwitchCourseMovement();
         Move();
+        GetFriction();
+        _speed = _rigidbody.velocity.magnitude * _coefficientKPHInMPH;
     }
 
     private void SwitchCourseMovement()
@@ -43,18 +50,53 @@ public class Wheel : MonoBehaviour
         {
             if (_movingForward)
             {
+                if (_speed >= _maxSpeedForward)
+                {
+                    for (int i = 0; i < _wheels.Length; i++)
+                    {
+                        _wheels[i].brakeTorque = _forceBraking;
+                    }
+                    return;
+                }
+                    
+
                 for (int i = 0; i < _wheels.Length; i++)
                 {
+                    _wheels[i].brakeTorque = 0f;
                     _wheels[i].motorTorque = _torque;
+                    Debug.Log("Speed");
                 }
             }
             else
             {
+                if (_speed >= _maxSpeedBack)
+                    return;
+
                 for (int i = 0; i < _wheels.Length; i++)
                 {
+                    _wheels[i].brakeTorque = 0f;
                     _wheels[i].motorTorque = -_torque;
                 }
             }
+        }
+        else
+        {
+            if (_speed > 1)
+            {
+                for (int i = 0; i < _wheels.Length; i++)
+                {
+                    _wheels[i].brakeTorque = _forceBraking;
+                }
+            }
+        }
+    }
+
+    private void GetFriction()
+    {
+        for (int i = 0; i < _wheels.Length; i++)
+        {
+            _wheels[i].GetGroundHit(out WheelHit wheelHit);
+            _slip[i] = wheelHit.forwardSlip;
         }
     }
 }
