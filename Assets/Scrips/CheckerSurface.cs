@@ -10,6 +10,7 @@ public class CheckerSurface : MonoBehaviour
     {
         RaycastHit hit = new();
         Physics.Raycast(transform.position, -transform.up * 5f, out hit);
+
         if (!hit.transform.TryGetComponent<Road>(out _))
         {
             return speed * _coefficientReductionOffRoadSpeed;

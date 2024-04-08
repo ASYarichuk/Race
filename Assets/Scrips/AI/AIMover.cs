@@ -11,9 +11,15 @@ public class AIMover : MonoBehaviour
     [SerializeField] private float _speed;
     [SerializeField] private float _maxSpeed = 90;
     [SerializeField] private float _minSpeed = 20;
+    [SerializeField] private float _minSpeedDownMove = 1;
     [SerializeField] private float _angleBegoreDecrease = 10;
+    private float _timer = 0;
+    private float _timeBeforeDownMove = 0.5f;
+
+    [SerializeField] private int _forceDownMove = 1000;
 
     [SerializeField] private AIWheelsRotator _aIWheelsRotator;
+    [SerializeField] private RaycastHit hit = new();
 
     private static float _coefficientKPHInMPH = 3.6f;
 
@@ -27,6 +33,7 @@ public class AIMover : MonoBehaviour
     {
         Move();
         CheckAngle();
+        MoveDown();
         _speed = _rigidbody.velocity.magnitude * _coefficientKPHInMPH;
     }
 
@@ -65,6 +72,27 @@ public class AIMover : MonoBehaviour
             for (int i = 0; i < _wheels.Length; i++)
             {
                 _wheels[i].brakeTorque = _forceBraking;
+            }
+        }
+    }
+
+    private void MoveDown()
+    {
+        if (_speed < _minSpeedDownMove)
+        {
+            _timer += Time.deltaTime;
+
+            if (_timer < _timeBeforeDownMove)
+            {
+                return;
+            }
+
+            Physics.Raycast(transform.position, transform.forward, out hit, 2);
+
+            if (hit.collider == null)
+            {
+                _rigidbody.AddRelativeForce(-Vector3.forward * _forceDownMove);
+                _timer = 0;
             }
         }
     }
