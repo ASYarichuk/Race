@@ -8,18 +8,24 @@ public class AIMover : MonoBehaviour
     [SerializeField] private float _torque = 200f;
     [SerializeField] private Rigidbody _rigidbody;
 
+    [SerializeField] private int _forceDownMove = 2;
+
     [SerializeField] private float _speed;
     [SerializeField] private float _maxSpeed = 90;
     [SerializeField] private float _minSpeed = 20;
     [SerializeField] private float _minSpeedDownMove = 1;
     [SerializeField] private float _angleBegoreDecrease = 10;
+    [SerializeField] private float _minRatioTorqueAI = 1;
+    [SerializeField] private float _maxRatioTorqueAI = 2;
+    [SerializeField] private float _raycastDistance = 2f;
+
+    [SerializeField] private AIWheelsRotator _aIWheelsRotator;
+
+    private float _ratioMinSpeed = 1.5f;
     private float _timer = 0;
     private float _timeBeforeDownMove = 0.5f;
 
-    [SerializeField] private int _forceDownMove = 1000;
-
-    [SerializeField] private AIWheelsRotator _aIWheelsRotator;
-    [SerializeField] private RaycastHit hit = new();
+    private RaycastHit hit = new();
 
     private static float _coefficientKPHInMPH = 3.6f;
 
@@ -28,6 +34,7 @@ public class AIMover : MonoBehaviour
     private int _forceBraking = 5000;
 
     private float _currentAngle;
+    [SerializeField] private float _mass;
 
     private void FixedUpdate()
     {
@@ -35,6 +42,7 @@ public class AIMover : MonoBehaviour
         CheckAngle();
         MoveDown();
         _speed = _rigidbody.velocity.magnitude * _coefficientKPHInMPH;
+        _mass = _rigidbody.mass;
     }
 
     private void Move()
@@ -54,11 +62,11 @@ public class AIMover : MonoBehaviour
 
             if (_speed < _minSpeed)
             {
-                _wheels[i].motorTorque = _torque * 2;
+                _wheels[i].motorTorque = _torque * Random.Range(_minRatioTorqueAI, _maxRatioTorqueAI) * _ratioMinSpeed;
             }
             else
             {
-                _wheels[i].motorTorque = _torque;
+                _wheels[i].motorTorque = _torque * Random.Range(_minRatioTorqueAI, _maxRatioTorqueAI);
             }
         }
     }
@@ -87,11 +95,11 @@ public class AIMover : MonoBehaviour
                 return;
             }
 
-            Physics.Raycast(transform.position, transform.forward, out hit, 2);
+            Physics.Raycast(transform.position, transform.forward, out hit, _raycastDistance);
 
             if (hit.collider == null)
             {
-                _rigidbody.AddRelativeForce(-Vector3.forward * _forceDownMove);
+                _rigidbody.AddRelativeForce(-Vector3.forward * _rigidbody.mass * _forceDownMove);
                 _timer = 0;
             }
         }

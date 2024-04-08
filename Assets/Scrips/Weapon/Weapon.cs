@@ -11,12 +11,13 @@ public class Weapon : MonoBehaviour
     [SerializeField] private Ammunition _bullet;
 
     [SerializeField] private Transform _parent;
+    [SerializeField] private Transform _barrel;
 
     public float CreateAmmunition(float currentTimeCooldown)
     {
         if (currentTimeCooldown >= _cooldown)
         {
-            Instantiate(_bullet, _parent.position, _parent.rotation, _parent);
+            Instantiate(_bullet, _barrel.position, _barrel.rotation, _parent);
             currentTimeCooldown = 0;
             return currentTimeCooldown;
         }

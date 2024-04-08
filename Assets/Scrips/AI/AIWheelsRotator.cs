@@ -14,7 +14,7 @@ public class AIWheelsRotator : MonoBehaviour
     [SerializeField] private float _maxAngle = 60;
     [SerializeField] private float _minAngle = -60;
 
-    [SerializeField] private Vector3 relative;
+    [SerializeField] private Vector3 _target;
 
     void FixedUpdate()
     {
@@ -23,10 +23,10 @@ public class AIWheelsRotator : MonoBehaviour
 
     private void AISteer()
     {
-        relative = transform.InverseTransformPoint(_targetPointer.SetTarget());
-        relative /= relative.magnitude;
+        _target = transform.InverseTransformPoint(_targetPointer.SetTarget());
+        _target /= _target.magnitude;
 
-        _angleTurn = (relative.x / relative.magnitude) * _steerForce;
+        _angleTurn = (_target.x / _target.magnitude) * _steerForce;
 
         if (_angleTurn > _maxAngle)
         {

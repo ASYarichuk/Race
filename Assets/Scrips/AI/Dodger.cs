@@ -6,25 +6,27 @@ public class Dodger : MonoBehaviour
 {
     [SerializeField] private float _radiusRaycast;
     [SerializeField] private float _distanceRaycast;
-    [SerializeField] private float _speedRotate;
-    [SerializeField] private float _turningPowerLeft = -1;
-    [SerializeField] private float _turningPowerRight = 1;
+    [SerializeField] private float _maxAngle = 60;
+    [SerializeField] private float _minAngle = -60;
+    [SerializeField] private float _angleTurn;
+
+    [SerializeField] private WheelCollider[] _wheels = new WheelCollider[2];
 
     [SerializeField] private Rigidbody _rigidbody;
-
-    [SerializeField] private Vector3 _eulerAngleVelocity;
 
     private void FixedUpdate()
     {
         RaycastHit hit = new();
         Physics.SphereCast(transform.position, _radiusRaycast, transform.forward, out hit, _distanceRaycast);
 
-        if (hit.transform != null)
+        if (hit.collider == null)
         {
-            if (hit.transform.GetComponent<Bullet>())
-            {
-                Dodge();
-            }
+            return;
+        }
+
+        if (hit.transform.GetComponent<Bullet>())
+        {
+            Dodge();
         }
     }
 
@@ -35,9 +37,11 @@ public class Dodger : MonoBehaviour
             return;
         }
 
-        Quaternion deltaRotation = Quaternion.Euler(_eulerAngleVelocity * _speedRotate * 
-            Random.Range(_turningPowerLeft, _turningPowerRight) * Time.fixedDeltaTime);
+        _angleTurn = Random.Range(_minAngle, _maxAngle);
 
-        _rigidbody.MoveRotation(_rigidbody.rotation * deltaRotation);
+        for (int i = 0; i < _wheels.Length; i++)
+        {
+            _wheels[i].steerAngle = _angleTurn;
+        }
     }
 }

@@ -4,17 +4,38 @@ using UnityEngine;
 
 public class Accelerator : MonoBehaviour
 {
-    [SerializeField] private float _ratioAcceleration = 1f;
+    [SerializeField] private float _ratio = 5f;
+    [SerializeField] private float _startRatio = 1f;
+    [SerializeField] private Button _acceleration;
+    [SerializeField] private float _time;
+    [SerializeField] private float _cooldown;
 
-    private PlayerMover _playerMover;
+    private float _currentTime = 0f;
+    private float _currentRatio = 1f;
 
-    private void Awake()
+    private void Update()
     {
-        _playerMover = GetComponentInParent<PlayerMover>();
+        _currentTime += Time.deltaTime;
+
+        if (_acceleration.IsPressed || Input.GetKeyDown(KeyCode.V))
+        {
+            if (_currentTime > _cooldown)
+            {
+                StartCoroutine(SpeedUp());
+                _currentTime = 0f;
+            }
+        }
     }
 
-    private void Start()
+    private IEnumerator SpeedUp()
     {
-        _playerMover.SetRatioAccelerator(_ratioAcceleration);
+        _currentRatio = _ratio;
+        yield return new WaitForSeconds(_time);
+        _currentRatio = _startRatio;
+    }
+
+    public float GiveRatio()
+    {
+        return _currentRatio;
     }
 }

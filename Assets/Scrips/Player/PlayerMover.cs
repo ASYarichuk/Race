@@ -2,74 +2,122 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
 public class PlayerMover : MonoBehaviour
 {
-    [SerializeField] private float _forceMove;
-    [SerializeField] private float _maxVelocity;
-    [SerializeField] private float _minVelocity;
-    [SerializeField] private float _currentAcceleration = 0.5f;
-    [SerializeField] private float _maxAcceleration = 2f;
-
     [SerializeField] private Button _gasPedal;
-    [SerializeField] private Button _accelerator;
+    [SerializeField] private Button _forward;
+    [SerializeField] private Button _back;
+    [SerializeField] private WheelCollider[] _wheels = new WheelCollider[4];
+    [SerializeField] private float _torque = 200f;
+    [SerializeField] private Rigidbody _rigidbody;
 
-    [SerializeField] private CheckerSurface _checkerSurface;
+    [SerializeField] private float _speed;
+    [SerializeField] private float _minSpeed = 20;
+    [SerializeField] private float _maxSpeedForward = 90;
+    [SerializeField] private float _maxSpeedBack = 35;
 
-    private Rigidbody _rigidbody;
+    [SerializeField] private Accelerator _accelerator;
 
-    private float _ratioAccelerator = 1.3f;
+    private static float _coefficientKPHInMPH = 3.6f;
 
-    private void Awake()
-    {
-        _rigidbody = GetComponent<Rigidbody>();
-    }
+    private bool _movingForward = true;
+
+    private float[] _slip = new float[4];
+
+    private int _forceBraking = 5000;
+
+    private float _ratioMinSpeed = 3f;
+    [SerializeField] private float _ratioAccelerator = 1f;
 
     private void FixedUpdate()
     {
-        AddSpeed();
-        LimitSpeed();
+        SwitchCourseMovement();
+        _ratioAccelerator = _accelerator.GiveRatio();
+        Move();
+        GetFriction();
+        _speed = _rigidbody.velocity.magnitude * _coefficientKPHInMPH;
     }
 
-    private void AddSpeed()
+    private void SwitchCourseMovement()
     {
-        Vector3 direction = transform.TransformDirection(new Vector3(0, 0, transform.localPosition.z));
+        if (_forward.IsPressed || Input.GetKey(KeyCode.Q))
+        {
+            _movingForward = true;
+        }
 
+        if (_back.IsPressed || Input.GetKey(KeyCode.E))
+        {
+            _movingForward = false;
+        }
+    }
+
+    private void Move()
+    {
         if (_gasPedal.IsPressed || Input.GetKey(KeyCode.W))
         {
-            _currentAcceleration += Time.fixedDeltaTime;
-
-            if (_accelerator.IsPressed || Input.GetKey(KeyCode.V))
+            if (_movingForward)
             {
-                _currentAcceleration *= _ratioAccelerator;
-            }
+                if (LimitSpeeds())
+                    return;
 
-            if (_currentAcceleration > _maxAcceleration)
-            {
-                _currentAcceleration = _maxAcceleration;
-            }
-
-            if (_rigidbody.velocity.magnitude > _minVelocity)
-            {
-                _rigidbody.AddForce(direction * _forceMove * _currentAcceleration * _checkerSurface.CheckSurface(Time.fixedDeltaTime));
+                for (int i = 0; i < _wheels.Length; i++)
+                {
+                    if (_speed < _minSpeed)
+                    {
+                        _wheels[i].brakeTorque = 0f;
+                        _wheels[i].motorTorque = _torque * _ratioMinSpeed * _ratioAccelerator;
+                    }
+                    else
+                    {
+                        _wheels[i].brakeTorque = 0f;
+                        _wheels[i].motorTorque = _torque * _ratioAccelerator;
+                    }
+                }
             }
             else
             {
-                _rigidbody.AddForce(direction * _forceMove * _currentAcceleration);
+                if (_speed >= _maxSpeedBack)
+                    return;
+
+                for (int i = 0; i < _wheels.Length; i++)
+                {
+                    _wheels[i].brakeTorque = 0f;
+                    _wheels[i].motorTorque = -_torque * _ratioAccelerator;
+                }
+            }
+        }
+        else
+        {
+            if (_speed > 1)
+            {
+                for (int i = 0; i < _wheels.Length; i++)
+                {
+                    _wheels[i].brakeTorque = _forceBraking;
+                }
             }
         }
     }
 
-    private void LimitSpeed()
+    private void GetFriction()
     {
-        if (_rigidbody.velocity.magnitude > _maxVelocity)
+        for (int i = 0; i < _wheels.Length; i++)
         {
-            _rigidbody.velocity = _rigidbody.velocity.normalized * _maxVelocity;
+            _wheels[i].GetGroundHit(out WheelHit wheelHit);
+            _slip[i] = wheelHit.forwardSlip;
         }
     }
 
-    public void SetRatioAccelerator(float ratioAccelerator)
+    private bool LimitSpeeds()
     {
-        _ratioAccelerator = ratioAccelerator;
+        if (_speed >= _maxSpeedForward)
+        {
+            for (int i = 0; i < _wheels.Length; i++)
+            {
+                _wheels[i].brakeTorque = _forceBraking;
+            }
+            return true;
+        }
+
+        return false;
     }
 }
