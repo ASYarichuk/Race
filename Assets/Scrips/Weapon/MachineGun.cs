@@ -8,8 +8,12 @@ public class MachineGun : Weapon
 
     [SerializeField] private float _currentTimeCooldown;
 
+    private PlayerButton _buttons;
+
     private void Awake()
     {
+        _buttons = GetComponentInParent<PlayerButton>();
+        _machineGun = _buttons.GiveButton(2);
         _currentTimeCooldown = GiveCooldown();
     }
 

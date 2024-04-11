@@ -16,12 +16,12 @@ public class AIMover : MonoBehaviour
     [SerializeField] private float _minSpeedDownMove = 1;
     [SerializeField] private float _angleBegoreDecrease = 10;
     [SerializeField] private float _minRatioTorqueAI = 1;
-    [SerializeField] private float _maxRatioTorqueAI = 2;
+    [SerializeField] private float _maxRatioTorqueAI = 2.5f;
     [SerializeField] private float _raycastDistance = 2f;
 
     [SerializeField] private AIWheelsRotator _aIWheelsRotator;
 
-    private float _ratioMinSpeed = 1.5f;
+    private float _ratioMinSpeed = 2.5f;
     private float _timer = 0;
     private float _timeBeforeDownMove = 0.5f;
 

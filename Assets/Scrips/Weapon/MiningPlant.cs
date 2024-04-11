@@ -8,8 +8,12 @@ public class MiningPlant : Weapon
 
     [SerializeField] private float _currentTimeCooldown;
 
+    private PlayerButton _buttons;
+
     private void Awake()
     {
+        _buttons = GetComponentInParent<PlayerButton>();
+        _miningPlant = _buttons.GiveButton(0);
         _currentTimeCooldown = GiveCooldown();
     }
 

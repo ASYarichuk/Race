@@ -8,8 +8,12 @@ public class RocketLauncher : Weapon
 
     [SerializeField] private float _currentTimeCooldown;
 
+    private PlayerButton _buttons;
+
     private void Awake()
     {
+        _buttons = GetComponentInParent<PlayerButton>();
+        _rocketLauncher = _buttons.GiveButton(3);
         _currentTimeCooldown = GiveCooldown();
     }
 

@@ -8,8 +8,17 @@ public class WheelsRotator : MonoBehaviour
 
     [SerializeField] private float _angleTurn;
 
-    [SerializeField] private Button _leftTurn;
-    [SerializeField] private Button _rightTurn;
+    private Button _leftTurn;
+    private Button _rightTurn;
+
+    private PlayerButton _buttons;
+
+    private void Awake()
+    {
+        _buttons = GetComponentInParent<PlayerButton>();
+        _leftTurn = _buttons.GiveButton(4);
+        _rightTurn = _buttons.GiveButton(5);
+    }
 
     void FixedUpdate()
     {

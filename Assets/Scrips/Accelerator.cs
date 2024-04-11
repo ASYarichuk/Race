@@ -13,6 +13,14 @@ public class Accelerator : MonoBehaviour
     private float _currentTime = 0f;
     private float _currentRatio = 1f;
 
+    private PlayerButton _buttons;
+
+    private void Awake()
+    {
+        _buttons = GetComponentInParent<PlayerButton>();
+        _acceleration = _buttons.GiveButton(1);
+    }
+
     private void Update()
     {
         _currentTime += Time.deltaTime;

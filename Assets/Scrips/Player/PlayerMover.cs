@@ -4,19 +4,22 @@ using UnityEngine;
 
 public class PlayerMover : MonoBehaviour
 {
-    [SerializeField] private Button _gasPedal;
-    [SerializeField] private Button _forward;
-    [SerializeField] private Button _back;
+    private Button _gasPedal;
+    private Button _forward;
+    private Button _back;
     [SerializeField] private WheelCollider[] _wheels = new WheelCollider[4];
     [SerializeField] private float _torque = 200f;
     [SerializeField] private Rigidbody _rigidbody;
 
     [SerializeField] private float _speed;
-    [SerializeField] private float _minSpeed = 20;
+    [SerializeField] private float _minSpeed = 40;
     [SerializeField] private float _maxSpeedForward = 90;
     [SerializeField] private float _maxSpeedBack = 35;
 
     [SerializeField] private Accelerator _accelerator;
+    [SerializeField] private float _ratioAccelerator = 1f;
+
+    private PlayerButton _buttons;
 
     private static float _coefficientKPHInMPH = 3.6f;
 
@@ -26,8 +29,15 @@ public class PlayerMover : MonoBehaviour
 
     private int _forceBraking = 5000;
 
-    private float _ratioMinSpeed = 3f;
-    [SerializeField] private float _ratioAccelerator = 1f;
+    private float _ratioMinSpeed = 8f;
+
+    private void Awake()
+    {
+        _buttons = GetComponentInParent<PlayerButton>();
+        _gasPedal = _buttons.GiveButton(6);
+        _forward = _buttons.GiveButton(7);
+        _back = _buttons.GiveButton(8);
+    }
 
     private void FixedUpdate()
     {
