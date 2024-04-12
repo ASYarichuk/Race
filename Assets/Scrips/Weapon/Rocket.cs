@@ -14,14 +14,6 @@ public class Rocket : Ammunition
         _explosion = GetComponentInChildren<ParticleSystem>();
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.transform.GetComponent<Road>())
-        {
-            Explosion();
-        }
-    }
-
     private void OnCollisionEnter(Collision collision)
     {
         Explosion();

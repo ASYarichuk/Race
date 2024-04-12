@@ -23,14 +23,6 @@ public class Bomb : Ammunition
         _rigidbody.AddForce(0, -_forceGravity, 0, ForceMode.Impulse);
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.transform.GetComponent<Road>())
-        {
-            Explosion();
-        }
-    }
-
     private void OnCollisionEnter(Collision collision)
     {
         Explosion();

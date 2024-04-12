@@ -4,5 +4,9 @@ using UnityEngine;
 
 public class Bullet : Ammunition
 {
+    private void OnTriggerEnter(Collider other)
+    {
+        Destroy(gameObject);
+    }
 
 }

@@ -7,9 +7,15 @@ public class Car : MonoBehaviour
     [SerializeField] private float _health;
     [SerializeField] private int _armor;
 
+    private float _damageMultiplier;
+    private float _currentDamage;
+
     public void TakeDamage(int damage)
     {
-        _health -= damage;
+        _damageMultiplier = damage / (damage + _armor);
+        _currentDamage = damage * _damageMultiplier;
+
+        _health -= _currentDamage;
 
         if (_health <= 0)
         {

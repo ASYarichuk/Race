@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AITargetPointer : MonoBehaviour
 {
-    [SerializeField] private ControllerPoints _controllerPoints;
+    private ControllerPoints _controllerPoints;
 
     [SerializeField] private int _currentNumberPoint = 0;
 
@@ -14,6 +14,7 @@ public class AITargetPointer : MonoBehaviour
 
     private void Awake()
     {
+        _controllerPoints = FindObjectOfType<ControllerPoints>();
         _currentTarget = _controllerPoints.SetPoint(_currentNumberPoint);
         _currentNumberPoint++;
     }

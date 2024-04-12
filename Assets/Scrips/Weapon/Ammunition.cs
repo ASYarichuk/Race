@@ -29,11 +29,6 @@ public class Ammunition : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        Destroy(gameObject);
-    }
-
     public int GiveDamage()
     {
         return _damage;

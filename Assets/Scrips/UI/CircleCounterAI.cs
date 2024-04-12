@@ -4,13 +4,18 @@ using UnityEngine;
 
 public class CircleCounterAI : MonoBehaviour
 {
-    [SerializeField] private PlaceTakenInRace _placeTakenInRace;
+    private PlaceTakenInRace _placeTakenInRace;
 
     [SerializeField] private int _maxCircle = 3;
     [SerializeField] private int _maxPoint = 4;
 
     [SerializeField] private int _currentCircle = 0;
     [SerializeField] private int _currentPoint = 0;
+
+    private void Awake()
+    {
+        _placeTakenInRace = FindObjectOfType<PlaceTakenInRace>();
+    }
 
     public void PointPassed()
     {
